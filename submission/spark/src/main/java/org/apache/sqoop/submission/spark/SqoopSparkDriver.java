@@ -23,6 +23,10 @@ import org.apache.sqoop.utils.ClassUtils;
 
 public class SqoopSparkDriver {
 
+  public static final String NUM_EXTRACTERS = "numExtractors";
+  public static final String NUM_LOADERS = "numLoaders";
+
+
   private static final Log LOG = LogFactory.getLog(SqoopSparkDriver.class.getName());
 
    public static void run(JobRequest request, SparkConf conf, JavaSparkContext sc) throws Exception {

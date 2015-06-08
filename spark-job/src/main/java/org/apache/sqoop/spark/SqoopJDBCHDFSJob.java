@@ -1,20 +1,12 @@
 package org.apache.sqoop.spark;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.sqoop.common.Direction;
-import org.apache.sqoop.core.ConfigurationConstants;
-import org.apache.sqoop.core.SqoopServer;
 import org.apache.sqoop.driver.Driver;
-import org.apache.sqoop.driver.JobManager;
-import org.apache.sqoop.driver.JobRequest;
-import org.apache.sqoop.job.spark.SparkDestroyerUtil;
 import org.apache.sqoop.model.MConfigList;
 import org.apache.sqoop.model.MConnector;
 import org.apache.sqoop.model.MDriverConfig;
@@ -22,11 +14,8 @@ import org.apache.sqoop.model.MFromConfig;
 import org.apache.sqoop.model.MJob;
 import org.apache.sqoop.model.MLink;
 import org.apache.sqoop.model.MLinkConfig;
-import org.apache.sqoop.model.MSubmission;
 import org.apache.sqoop.model.MToConfig;
 import org.apache.sqoop.repository.RepositoryManager;
-import org.apache.sqoop.request.HttpEventContext;
-import org.apache.sqoop.submission.spark.SqoopSparkDriver;
 
 public class SqoopJDBCHDFSJob extends SqoopSparkJob {
 
@@ -95,20 +84,21 @@ public class SqoopJDBCHDFSJob extends SqoopSparkJob {
     MFromConfig fromJobConfig = fromConnector.getFromConfig();
     MToConfig toJobConfig = toConnector.getToConfig();
 
-    MJob job = new MJob(fromConnector.getPersistenceId(), toConnector.getPersistenceId(),
+    MJob sqoopJob = new MJob(fromConnector.getPersistenceId(), toConnector.getPersistenceId(),
         fromLink.getPersistenceId(), toLink.getPersistenceId(), fromJobConfig, toJobConfig, Driver
             .getInstance().getDriver().getDriverConfig());
 
-    MConfigList fromConfig = job.getJobConfig(Direction.FROM);
+    MConfigList fromConfig = sqoopJob.getJobConfig(Direction.FROM);
     fromConfig.getStringInput("fromJobConfig.tableName").setValue(cArgs.getOptionValue("table"));
     fromConfig.getStringInput("fromJobConfig.partitionColumn").setValue(cArgs.getOptionValue("pc"));
 
-    MToConfig toConfig = job.getToJobConfig();
+    MToConfig toConfig = sqoopJob.getToJobConfig();
     toConfig.getStringInput("toJobConfig.outputDirectory").setValue(
         cArgs.getOptionValue("outputDir") + System.currentTimeMillis());
-    MDriverConfig driverConfig = job.getDriverConfig();
+    MDriverConfig driverConfig = sqoopJob.getDriverConfig();
     driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(3);
-    RepositoryManager.getInstance().getRepository().createJob(job);
-
+    RepositoryManager.getInstance().getRepository().createJob(sqoopJob);
+    sparkJob.setJob(sqoopJob);
+    sparkJob.execute(conf, context);
   }
 }

@@ -24,9 +24,6 @@ import org.apache.sqoop.submission.spark.SqoopSparkDriver;
 
 public class SqoopSparkJob implements Serializable {
 
-  public static final String NUM_EXTRACTERS = "numExtracters";
-  public static final String NUM_LOADERS = "numLoaders";
-
   private MJob job;
   private static CommandLineParser parser;
 
@@ -87,10 +84,10 @@ public class SqoopSparkJob implements Serializable {
 
   public SparkConf init(CommandLine cArgs) throws ClassNotFoundException {
     System.setProperty(ConfigurationConstants.SYSPROP_CONFIG_DIR, cArgs.getOptionValue("confDir"));
-    // by default it is local
+    // by default it is local, override based on the submit parameter
     SparkConf conf = new SparkConf().setAppName("sqoop-spark").setMaster("local");
-    conf.set(NUM_EXTRACTERS, cArgs.getOptionValue("numE"));
-    conf.set(NUM_LOADERS, cArgs.getOptionValue("numL"));
+    conf.set(SqoopSparkDriver.NUM_EXTRACTERS, cArgs.getOptionValue("numE"));
+    conf.set(SqoopSparkDriver.NUM_LOADERS, cArgs.getOptionValue("numL"));
     // hack to load extra classes
     Class.forName("com.mysql.jdbc.Driver");
     SqoopServer.initialize();
