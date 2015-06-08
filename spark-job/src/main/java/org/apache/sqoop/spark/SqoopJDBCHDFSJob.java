@@ -31,13 +31,13 @@ public class SqoopJDBCHDFSJob extends SqoopSparkJob {
         .isRequired().withArgName("username").create());
 
     options.addOption(OptionBuilder.withLongOpt("p").withDescription("jdbc password").hasArg()
-        .isRequired().withArgName("password").create());
+        .withArgName("password").create());
 
     options.addOption(OptionBuilder.withLongOpt("table").withDescription("jdbc table").hasArg()
         .isRequired().withArgName("table").create());
 
     options.addOption(OptionBuilder.withLongOpt("pc").withDescription("jdbc table parition column")
-        .hasArg().isRequired().withArgName("pc").create());
+        .hasArg().withArgName("pc").create());
 
     options.addOption(OptionBuilder.withLongOpt("outputDir").withDescription("hdfs output dir")
         .hasArg().isRequired().withArgName("outputDir").create());

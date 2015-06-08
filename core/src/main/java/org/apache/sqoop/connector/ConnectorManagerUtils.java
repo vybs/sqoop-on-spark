@@ -51,9 +51,8 @@ public class ConnectorManagerUtils {
     try {
       // Check ConnectorManager classloader.
       Enumeration<URL> appPath0Configs = ConnectorManager.class.getClassLoader().getResources(
-          ConfigurationConstants.FILENAME_CONNECTOR_PROPERTIES);
+          ConfigurationConstants.FILENAME_CONNECTOR_KITE_PROPERTIES);
 
-      
       // TODO: fix the following temp hack to look up per property name
       Enumeration<URL> appPath1Configs = ConnectorManager.class.getClassLoader().getResources(
           ConfigurationConstants.FILENAME_CONNECTOR_JDBC_PROPERTIES);
@@ -70,7 +69,7 @@ public class ConnectorManagerUtils {
       while (appPath1Configs.hasMoreElements()) {
         connectorConfigs.add(appPath1Configs.nextElement());
       }
-      
+
       while (appPath2Configs.hasMoreElements()) {
         connectorConfigs.add(appPath2Configs.nextElement());
       }
@@ -81,14 +80,19 @@ public class ConnectorManagerUtils {
       // Check thread context classloader.
       ClassLoader ctxLoader = Thread.currentThread().getContextClassLoader();
       if (ctxLoader != null) {
-        Enumeration<URL> ctxPath0Configs = ctxLoader.getResources(ConfigurationConstants.FILENAME_CONNECTOR_PROPERTIES);
         // TODO: fix the following temp hack to look up per property name
 
-        Enumeration<URL> ctxPath1Configs = ctxLoader.getResources(ConfigurationConstants.FILENAME_CONNECTOR_JDBC_PROPERTIES);
-        Enumeration<URL> ctxPath2Configs = ctxLoader.getResources(ConfigurationConstants.FILENAME_CONNECTOR_HDFS_PROPERTIES);
-        Enumeration<URL> ctxPath3Configs = ctxLoader.getResources(ConfigurationConstants.FILENAME_CONNECTOR_HDFS_PROPERTIES);
+        Enumeration<URL> ctxPath0Configs = ctxLoader
+            .getResources(ConfigurationConstants.FILENAME_CONNECTOR_KITE_PROPERTIES);
 
-        addToConnectorConfigs(connectorConfigs, ctxPath0Configs);
+        Enumeration<URL> ctxPath1Configs = ctxLoader
+            .getResources(ConfigurationConstants.FILENAME_CONNECTOR_JDBC_PROPERTIES);
+        Enumeration<URL> ctxPath2Configs = ctxLoader
+            .getResources(ConfigurationConstants.FILENAME_CONNECTOR_HDFS_PROPERTIES);
+        Enumeration<URL> ctxPath3Configs = ctxLoader
+            .getResources(ConfigurationConstants.FILENAME_CONNECTOR_HDFS_PROPERTIES);
+
+         addToConnectorConfigs(connectorConfigs, ctxPath0Configs);
         addToConnectorConfigs(connectorConfigs, ctxPath1Configs);
         addToConnectorConfigs(connectorConfigs, ctxPath2Configs);
         addToConnectorConfigs(connectorConfigs, ctxPath3Configs);
@@ -131,7 +135,8 @@ public class ConnectorManagerUtils {
 
   static boolean isConnectorJar(File file) {
     try {
-      JarEntry entry = new JarFile(file).getJarEntry(ConfigurationConstants.FILENAME_CONNECTOR_PROPERTIES);
+      JarEntry entry = new JarFile(file)
+          .getJarEntry(ConfigurationConstants.FILENAME_CONNECTOR_PROPERTIES);
       return entry != null;
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -148,16 +153,15 @@ public class ConnectorManagerUtils {
 
       // Add the 'org.apache.sqoop.connector.external.loadpath' to the classpath
       // Chain the current thread classloader
-      ExternalConnectorJarFileLoader connectorUrlClassLoader = new ExternalConnectorJarFileLoader(new URL[] {},
-          currentThreadClassLoader);
+      ExternalConnectorJarFileLoader connectorUrlClassLoader = new ExternalConnectorJarFileLoader(
+          new URL[] {}, currentThreadClassLoader);
       // the property always holds a path to the folder containing the jars
       Set<File> connectorJars = getConnectorJars(path);
       if (connectorJars != null && !connectorJars.isEmpty()) {
         for (File jar : connectorJars) {
           connectorUrlClassLoader.addJarFile(jar.getPath());
         }
-        
-       
+
         // Replace the thread classloader- assuming there is permission to do so
         Thread.currentThread().setContextClassLoader(connectorUrlClassLoader);
       }

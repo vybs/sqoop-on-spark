@@ -17,38 +17,6 @@ import org.apache.sqoop.repository.RepositoryManager;
 
 public class SqoopJDBCKafkaJob extends SqoopSparkJob {
 
-  @SuppressWarnings("static-access")
-  static Options createOptions() {
-
-    Options options = new Options();
-
-    options.addOption(OptionBuilder.withLongOpt("jcs").withDescription("jdbc connection string")
-        .hasArg().isRequired().withArgName("jdbcConnectionString").create());
-
-    options.addOption(OptionBuilder.withLongOpt("u").withDescription("jdbc username").hasArg()
-        .isRequired().withArgName("username").create());
-
-    options.addOption(OptionBuilder.withLongOpt("p").withDescription("jdbc password").hasArg()
-        .isRequired().withArgName("password").create());
-
-    options.addOption(OptionBuilder.withLongOpt("table").withDescription("jdbc table").hasArg()
-        .isRequired().withArgName("table").create());
-
-    options.addOption(OptionBuilder.withLongOpt("pc").withDescription("jdbc table parition column").hasArg()
-        .isRequired().withArgName("pc").create());
-
-    options.addOption(OptionBuilder.withLongOpt("zk").withDescription("kafka zk").hasArg()
-        .isRequired().withArgName("kafkaZkHostAndPort").create());
-
-    options.addOption(OptionBuilder.withLongOpt("broker").withDescription("kafka borker list")
-        .hasArg().isRequired().withArgName("kafkaBrokerList").create());
-
-    addCommonOptions(options);
-
-    
-    return options;
-  }
-
   public static void main(String[] args) throws Exception {
 
     final SqoopSparkJob sparkJob = new SqoopSparkJob();
@@ -58,15 +26,8 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
 
     MConnector fromConnector = RepositoryManager.getInstance().getRepository()
         .findConnector("generic-jdbc-connector");
-    MConnector toConnector = RepositoryManager.getInstance().getRepository()
-        .findConnector("kafka-connector");
 
     MLinkConfig fromLinkConfig = fromConnector.getLinkConfig();
-    MLinkConfig toLinkConfig = toConnector.getLinkConfig();
-
-    MFromConfig fromJobConfig = fromConnector.getFromConfig();
-    MToConfig toJobConfig = toConnector.getToConfig();
-
     MLink fromLink = new MLink(fromConnector.getPersistenceId(), fromLinkConfig);
     fromLink.setName("jdbcLink-" + System.currentTimeMillis());
 
@@ -82,6 +43,11 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
 
     RepositoryManager.getInstance().getRepository().createLink(fromLink);
 
+    MConnector toConnector = RepositoryManager.getInstance().getRepository()
+        .findConnector("kafka-connector");
+
+    MLinkConfig toLinkConfig = toConnector.getLinkConfig();
+
     MLink toLink = new MLink(toConnector.getPersistenceId(), toLinkConfig);
     toLink.setName("kafkaLink-" + System.currentTimeMillis());
 
@@ -91,6 +57,9 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
         .setValue(cArgs.getOptionValue("zk"));
 
     RepositoryManager.getInstance().getRepository().createLink(toLink);
+
+    MFromConfig fromJobConfig = fromConnector.getFromConfig();
+    MToConfig toJobConfig = toConnector.getToConfig();
 
     MJob sqoopJob = new MJob(fromConnector.getPersistenceId(), toConnector.getPersistenceId(),
         fromLink.getPersistenceId(), toLink.getPersistenceId(), fromJobConfig, toJobConfig, Driver
@@ -108,6 +77,37 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
     RepositoryManager.getInstance().getRepository().createJob(sqoopJob);
     sparkJob.setJob(sqoopJob);
     sparkJob.execute(conf, context);
+  }
+
+  @SuppressWarnings("static-access")
+  static Options createOptions() {
+
+    Options options = new Options();
+
+    options.addOption(OptionBuilder.withLongOpt("jcs").withDescription("jdbc connection string")
+        .hasArg().isRequired().withArgName("jdbcConnectionString").create());
+
+    options.addOption(OptionBuilder.withLongOpt("u").withDescription("jdbc username").hasArg()
+        .isRequired().withArgName("username").create());
+
+    options.addOption(OptionBuilder.withLongOpt("p").withDescription("jdbc password").hasArg()
+        .isRequired().withArgName("password").create());
+
+    options.addOption(OptionBuilder.withLongOpt("table").withDescription("jdbc table").hasArg()
+        .isRequired().withArgName("table").create());
+
+    options.addOption(OptionBuilder.withLongOpt("pc").withDescription("jdbc table parition column")
+        .hasArg().isRequired().withArgName("pc").create());
+
+    options.addOption(OptionBuilder.withLongOpt("zk").withDescription("kafka zk").hasArg()
+        .isRequired().withArgName("kafkaZkHostAndPort").create());
+
+    options.addOption(OptionBuilder.withLongOpt("broker").withDescription("kafka borker list")
+        .hasArg().isRequired().withArgName("kafkaBrokerList").create());
+
+    addCommonOptions(options);
+
+    return options;
   }
 
 }

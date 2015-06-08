@@ -70,6 +70,9 @@ public final class ConfigurationConstants {
   public static final String FILENAME_CONNECTOR_KAFKA_PROPERTIES =
       "sqoopconnector-kafka.properties";
 
+  public static final String FILENAME_CONNECTOR_KITE_PROPERTIES =
+      "sqoopconnector-kite.properties";
+
   public static final String CONPROP_PROVIDER_CLASS =
       "org.apache.sqoop.connector.class";
 

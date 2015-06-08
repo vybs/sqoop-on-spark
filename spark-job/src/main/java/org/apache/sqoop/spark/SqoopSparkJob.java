@@ -100,7 +100,7 @@ public class SqoopSparkJob implements Serializable {
       throw new RuntimeException("Job not set for spark execution");
     }
     HttpEventContext ctx = new HttpEventContext();
-    ctx.setUsername(conf.get("username") != null ? conf.get("username") : "testsqoop");
+    ctx.setUsername("testsqoop");
     MSubmission mSubmission = JobManager.getInstance().createJobSubmission(ctx,
         job.getPersistenceId());
     JobRequest jobRequest = JobManager.getInstance().createJobRequest(job.getPersistenceId(),
