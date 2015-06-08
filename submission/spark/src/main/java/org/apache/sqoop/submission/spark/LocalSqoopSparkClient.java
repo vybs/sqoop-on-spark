@@ -73,7 +73,7 @@ public class LocalSqoopSparkClient implements SqoopSparkClient {
   public void execute(JobRequest request) throws Exception {
 
     // SparkCounters sparkCounters = new SparkCounters(sc);
-    SqoopSparkDriver.run(request, getSparkConf(), sc);
+    SqoopSparkDriver.execute(request, getSparkConf(), sc);
     SparkDestroyerUtil.executeDestroyer(true, request, Direction.FROM);
     SparkDestroyerUtil.executeDestroyer(true, request, Direction.TO);
 

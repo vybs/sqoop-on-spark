@@ -49,6 +49,9 @@ public class SparkExecutionEngine extends ExecutionEngine {
     if (sparkJobRequest.getExtractors() != null) {
       driverContext.setInteger(SparkJobConstants.JOB_ETL_EXTRACTOR_NUM,
           sparkJobRequest.getExtractors());
+      
+      System.out.println(">>> Configured Extractor size:" + sparkJobRequest.getExtractors());
+
     }
 
     for (Map.Entry<String, String> entry : request.getDriverContext()) {
@@ -75,6 +78,15 @@ public class SparkExecutionEngine extends ExecutionEngine {
         continue;
       }
       request.getConf().put(JobConstants.PREFIX_CONNECTOR_TO_CONTEXT + entry.getKey(),
+          entry.getValue());
+    }
+    
+    for (Map.Entry<String, String> entry : request.getDriverContext()) {
+      if (entry.getValue() == null) {
+        LOG.warn("Ignoring null connector context value for key " + entry.getKey());
+        continue;
+      }
+      request.getConf().put(JobConstants.PREFIX_CONNECTOR_DRIVER_CONTEXT + entry.getKey(),
           entry.getValue());
     }
   }

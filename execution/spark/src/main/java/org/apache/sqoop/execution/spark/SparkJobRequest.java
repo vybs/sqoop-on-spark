@@ -9,9 +9,6 @@ import java.io.Serializable;
  */
 public class SparkJobRequest extends JobRequest implements Serializable {
 
-	/**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   public SparkJobRequest() {

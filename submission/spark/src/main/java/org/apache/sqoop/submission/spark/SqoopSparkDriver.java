@@ -23,32 +23,54 @@ import org.apache.sqoop.utils.ClassUtils;
 
 public class SqoopSparkDriver {
 
-  public static final String NUM_EXTRACTERS = "numExtractors";
+  public static final String DEFAULT_EXTRACTORS = "defaultExtractors";
   public static final String NUM_LOADERS = "numLoaders";
-
 
   private static final Log LOG = LogFactory.getLog(SqoopSparkDriver.class.getName());
 
-   public static void run(JobRequest request, SparkConf conf, JavaSparkContext sc) throws Exception {
-   
+  public static void execute(JobRequest request, SparkConf conf, JavaSparkContext sc)
+      throws Exception {
+
     LOG.info("Executing sqoop spark job");
 
     long totalTime = System.currentTimeMillis();
-    
-    List<Partition> sp = getPartitions(request, conf.getInt("numExtractors", 1));
+    SparkPrefixContext driverContext = new SparkPrefixContext(request.getConf(),
+        JobConstants.PREFIX_CONNECTOR_DRIVER_CONTEXT);
+
+    int defaultExtractors = conf.getInt(DEFAULT_EXTRACTORS, 10);
+    long numExtractors = (driverContext.getLong(JobConstants.JOB_ETL_EXTRACTOR_NUM,
+        defaultExtractors));
+    int numLoaders = conf.getInt(NUM_LOADERS, 1);
+
+    List<Partition> sp = getPartitions(request, numExtractors);
+    System.out.println(">>> Partition size:" + sp.size());
+
     JavaRDD<Partition> rdd = sc.parallelize(sp, sp.size());
-    JavaRDD<Collection<IntermediateDataFormat<?>>> mapRDD = rdd.map(new SqoopExtractFunction(request));
-    mapRDD.map(new SqoopLoadFunction(request)).collect();
+    JavaRDD<Collection<IntermediateDataFormat<?>>> mapRDD = rdd.map(new SqoopExtractFunction(
+        request));
+    System.out.println(">>> extractor RDD size:" + mapRDD.count());
 
-    System.out.println(">>> TOTAL time ms:"+ (System.currentTimeMillis()-totalTime));
-    System.out.println(">>> Partition size" + sp.size());
+    // if max loaders or num loaders is given reparition to adjust the max
+    // loader parallelism
+    if (numLoaders != numExtractors) {
+      System.out.println(">>> RePartition size:" + numLoaders);
+      JavaRDD<Collection<IntermediateDataFormat<?>>> reParitionedRDD = mapRDD.repartition(numLoaders);
+      System.out.println(">>> RePartition RDD size:" + reParitionedRDD.count());
+      reParitionedRDD.map(new SqoopLoadFunction(request)).collect();
+    } else {
+      mapRDD.map(new SqoopLoadFunction(request)).collect();
+    }
 
-    LOG.info("Done EL in sqoop spark job, nexy destroy");
+    System.out.println(">>> TOTAL time ms:" + (System.currentTimeMillis() - totalTime));
+
+    LOG.info("Done EL in sqoop spark job, next call destroy apis");
 
   }
 
-  private static List<Partition> getPartitions(JobRequest request, int numMappers) {
+  @SuppressWarnings("unchecked")
+  private static List<Partition> getPartitions(JobRequest request, long maxPartitions) {
     String partitionerName = request.getDriverContext().getString(JobConstants.JOB_ETL_PARTITIONER);
+    @SuppressWarnings("rawtypes")
     Partitioner partitioner = (Partitioner) ClassUtils.instantiate(partitionerName);
     SparkPrefixContext context = new SparkPrefixContext(request.getConf(),
         JobConstants.PREFIX_CONNECTOR_FROM_CONTEXT);
@@ -56,8 +78,9 @@ public class SqoopSparkDriver {
     Object fromLinkConfig = request.getConnectorLinkConfig(Direction.FROM);
     Object fromJobConfig = request.getJobConfig(Direction.FROM);
     Schema fromSchema = request.getJobSubmission().getFromSchema();
-    
-    long maxPartitions = context.getLong(JobConstants.JOB_ETL_EXTRACTOR_NUM, numMappers);
+
+    System.out.println(">>> Configured Partition size:" + maxPartitions);
+
     PartitionerContext partitionerContext = new PartitionerContext(context, maxPartitions,
         fromSchema);
 

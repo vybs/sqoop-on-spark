@@ -31,7 +31,6 @@ public class SparkPrefixContext implements ImmutableContext {
   String prefix;
   private final Map<String, String> options;
 
-
   public SparkPrefixContext(Map<String, String> options, String prefix) {
     this.options = options;
     this.prefix = prefix;
@@ -46,12 +45,12 @@ public class SparkPrefixContext implements ImmutableContext {
    */
   @Override
   public String getString(String key) {
-    return options.get(prefix+ key);
+    return options.get(prefix + key);
   }
 
   @Override
   public String getString(String key, String defaultValue) {
-    String value = getString(prefix+ key);
+    String value = getString(prefix + key);
     if (value == null || value.trim().length() == 0) {
       value = defaultValue;
     }
@@ -63,7 +62,7 @@ public class SparkPrefixContext implements ImmutableContext {
    */
   @Override
   public boolean getBoolean(String key, boolean defaultValue) {
-    String value = getString(prefix+ key);
+    String value = getString(prefix + key);
     boolean result = defaultValue;
     if (value != null) {
       result = Boolean.valueOf(value);
@@ -77,11 +76,11 @@ public class SparkPrefixContext implements ImmutableContext {
    */
   @Override
   public long getLong(String key, long defaultValue) {
-    if (!options.containsKey(prefix+ key)) {
+    if (!options.containsKey(prefix + key)) {
       return defaultValue;
     }
 
-    String value = options.get(prefix+ key);
+    String value = options.get(prefix + key);
 
     return Long.parseLong(value);
   }
@@ -91,11 +90,11 @@ public class SparkPrefixContext implements ImmutableContext {
    */
   @Override
   public int getInt(String key, int defaultValue) {
-    if (!options.containsKey(prefix+ key)) {
+    if (!options.containsKey(prefix + key)) {
       return defaultValue;
     }
 
-    String value = options.get(prefix+ key);
+    String value = options.get(prefix + key);
 
     return Integer.parseInt(value);
   }
@@ -104,7 +103,5 @@ public class SparkPrefixContext implements ImmutableContext {
   public Iterator<Map.Entry<String, String>> iterator() {
     return options.entrySet().iterator();
   }
-  
- 
 
 }

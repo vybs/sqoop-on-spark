@@ -35,7 +35,7 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
         .setValue("com.mysql.jdbc.Driver");
 
     fromLink.getConnectorLinkConfig().getStringInput("linkConfig.connectionString")
-        .setValue(cArgs.getOptionValue("jcs"));
+        .setValue(cArgs.getOptionValue("jdbcString"));
     fromLink.getConnectorLinkConfig().getStringInput("linkConfig.username")
         .setValue(cArgs.getOptionValue("u"));
     fromLink.getConnectorLinkConfig().getStringInput("linkConfig.password")
@@ -67,12 +67,14 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
     // jdbc configs
     MFromConfig fromConfig = sqoopJob.getFromJobConfig();
     fromConfig.getStringInput("fromJobConfig.tableName").setValue(cArgs.getOptionValue("table"));
-    fromConfig.getStringInput("fromJobConfig.partitionColumn").setValue(cArgs.getOptionValue("pc"));
+    fromConfig.getStringInput("fromJobConfig.partitionColumn").setValue(cArgs.getOptionValue("partitionCol"));
     // kafka configs
     MToConfig toConfig = sqoopJob.getToJobConfig();
     toConfig.getStringInput("toJobConfig.topic").setValue("test-spark-topic");
 
     MDriverConfig driverConfig = sqoopJob.getDriverConfig();
+    driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(Integer.valueOf(cArgs.getOptionValue("maxE")));
+    driverConfig.getIntegerInput("throttlingConfig.numLoaders").setValue(Integer.valueOf(cArgs.getOptionValue("numL")));
     driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(3);
     RepositoryManager.getInstance().getRepository().createJob(sqoopJob);
     sparkJob.setJob(sqoopJob);
