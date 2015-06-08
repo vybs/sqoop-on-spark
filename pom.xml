@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>9</version>
+  </parent>
+
+  <groupId>org.apache</groupId>
+  <artifactId>sqoop</artifactId>
+  <version>2.0.0-SNAPSHOT</version>
+  <description>Apache Sqoop</description>
+  <name>Sqoop</name>
+  <packaging>pom</packaging>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://issues.apache.org/jira/browse/sqoop</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/job/sqoop/</url>
+  </ciManagement>
+
+  <inceptionYear>2011</inceptionYear>
+
+  <mailingLists>
+    <mailingList>
+      <name>sqoop-user</name>
+      <subscribe>user-subscribe@sqoop.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@sqoop.apache.org</unsubscribe>
+      <post>user@sqoop.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/sqoop-user/</archive>
+    </mailingList>
+    <mailingList>
+      <name>sqoop-dev</name>
+      <subscribe>dev-subscribe@sqoop.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@sqoop.apache.org</unsubscribe>
+      <post>dev@sqoop.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/sqoop-dev/</archive>
+    </mailingList>
+    <mailingList>
+      <name>sqoop-commits</name>
+      <subscribe>commits-subscribe@sqoop.apache.org</subscribe>
+      <unsubscribe>commits-unsubscribe@sqoop.apache.org</unsubscribe>
+      <post>commits@sqoop.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/sqoop-commits/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <scm>
+    <connection>scm:git:https://git-wip-us.apache.org/repos/asf/sqoop.git</connection>
+    <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/sqoop.git</developerConnection>
+    <url>https://git-wip-us.apache.org/repos/asf?p=sqoop.git</url>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compile.source>1.6</maven.compile.source>
+    <maven.compile.target>1.6</maven.compile.target>
+    <commons-cli.version>1.2</commons-cli.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
+    <commons-lang.version>2.5</commons-lang.version>
+    <commons-io.version>2.4</commons-io.version>
+    <commons-compress.version>1.9</commons-compress.version>
+    <commons-codec.version>1.9</commons-codec.version>
+    <derby.version>10.8.2.2</derby.version>
+    <hadoop.2.version>2.6.0</hadoop.2.version>
+    <hive.version>0.13.1</hive.version>
+    <guava.version>11.0.2</guava.version>
+    <json-simple.version>1.1</json-simple.version>
+    <testng.version>6.8.13</testng.version>
+    <mockito.version>1.9.5</mockito.version>
+    <powermock.version>1.5.6</powermock.version>
+    <log4j.version>1.2.16</log4j.version>
+    <servlet.version>3.0-alpha-1</servlet.version>
+    <cargo.version>1.3.2</cargo.version>
+    <tomcat.major.version>6</tomcat.major.version>
+    <tomcat.minor.version>0.37</tomcat.minor.version>
+    <tomcat.version>${tomcat.major.version}.${tomcat.minor.version}</tomcat.version>
+    <jdbc.mysql.version>5.1.23</jdbc.mysql.version>
+    <jdbc.postgresql.version>9.1-901.jdbc4</jdbc.postgresql.version>
+    <jdbc.oracle.version>11.2.0.3</jdbc.oracle.version>
+    <jdbc.sqlserver.version>4.0</jdbc.sqlserver.version>
+    <jdbc.teradata.version>14.00.00.21</jdbc.teradata.version>
+    <jdbc.netezza.version>6.0</jdbc.netezza.version>
+    <joda.version>2.4</joda.version>
+    <kitesdk.version>1.0.0</kitesdk.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <zookeeper.version>3.4.6</zookeeper.version>
+    <kafka.version>0.8.1.1</kafka.version>
+    <avro.version>1.7.7</avro.version>
+    <jcommander.version>1.27</jcommander.version>
+    <scala.minor.version>2.10</scala.minor.version>
+    <spark.version>1.3.0</spark.version>
+    <netty.version>4.0.23.Final</netty.version>
+    <kryo.version>2.22</kryo.version>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <!-- Profiles for various supported Hadoop distributions -->
+  <profiles>
+    <profile>
+      <id>fast</id>
+
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <excludedGroups>slow</excludedGroups>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <excludedGroups>slow</excludedGroups>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>slow</id>
+
+      <activation>
+        <property>
+          <name>slow</name>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <groups>slow</groups>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <groups>slow</groups>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Sign profile for releasing artifacts to Nexus repository -->
+    <profile>
+      <id>sign</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>cdh5</id>
+      <repositories>
+        <repository>
+          <id>cloudera</id>
+          <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+      </repositories>
+      <!-- Latest version; can be overridden -->
+      <properties>
+        <hadoop.version>2.5.0-cdh5.3.2</hadoop.version>
+        <spark.version>1.2.0-cdh5.3.2</spark.version>
+      </properties>
+    </profile>
+
+  </profiles>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-client</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-shell</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-common-test</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-core</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-server</artifactId>
+        <type>war</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.repository</groupId>
+        <artifactId>sqoop-repository-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.repository</groupId>
+        <artifactId>sqoop-repository-derby</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.repository</groupId>
+        <artifactId>sqoop-repository-postgresql</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>connector-sdk</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-generic-jdbc</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-generic-jdbc</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-hdfs</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-hdfs</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-kite</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-kite</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-kafka</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-kafka</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.connector</groupId>
+        <artifactId>sqoop-connector-mysql-jdbc</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-tools</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-security</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop</groupId>
+        <artifactId>sqoop-tomcat</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+	  <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-client</artifactId>
+        <version>${hadoop.2.version}</version>
+        <scope>provided</scope>
+				
+        <exclusions>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-mapreduce-client-core</artifactId>
+        <version>${hadoop.2.version}</version>
+        <scope>provided</scope>
+				
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+        <version>${hadoop.2.version}</version>
+        <scope>provided</scope>
+				
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-minicluster</artifactId>
+        <version>${hadoop.2.version}</version>
+        <scope>provided</scope>
+				
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-auth</artifactId>
+        <version>${hadoop.2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-jdbc</artifactId>
+        <version>${hive.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-service</artifactId>
+        <version>${hive.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-common</artifactId>
+        <version>${hive.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-exec</artifactId>
+        <version>${hive.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-serde</artifactId>
+        <version>${hive.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>${json-simple.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-compress</artifactId>
+        <version>${commons-compress.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.submission</groupId>
+        <artifactId>sqoop-submission-mapreduce</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.execution</groupId>
+        <artifactId>sqoop-execution-mapreduce</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.submission</groupId>
+        <artifactId>sqoop-submission-spark</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.execution</groupId>
+        <artifactId>sqoop-execution-spark</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.sqoop.spark</groupId>
+        <artifactId>spark-job</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId>
+        <version>${commons-dbcp.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>${commons-lang.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>${commons-cli.version}</version>
+      </dependency>
+       <dependency>
+         <groupId>commons-io</groupId>
+         <artifactId>commons-io</artifactId>
+         <version>${commons-io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons-codec.version}</version>
+      </dependency>
+		  <dependency>
+		     <groupId>javax.servlet</groupId>
+		     <artifactId>servlet-api</artifactId>
+		    <version>${servlet.version}</version>
+		 </dependency>
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>${testng.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>${derby.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derbynet</artifactId>
+        <version>${derby.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derbyclient</artifactId>
+        <version>${derby.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-core-container-tomcat</artifactId>
+        <version>${cargo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${jdbc.mysql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${jdbc.postgresql.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.beust</groupId>
+        <artifactId>jcommander</artifactId>
+        <version>${jcommander.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ojdbc14</artifactId>
+        <version>${jdbc.oracle.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.microsoft</groupId>
+        <artifactId>sqljdbc4</artifactId>
+        <version>${jdbc.sqlserver.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.teradata</groupId>
+        <artifactId>tdgssconfig</artifactId>
+        <version>${jdbc.teradata.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.teradata</groupId>
+        <artifactId>terajdbc4</artifactId>
+        <version>${jdbc.teradata.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ibm.netezza</groupId>
+        <artifactId>nzjdbc3</artifactId>
+        <version>${jdbc.netezza.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>${joda.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.powermock</groupId>
+        <artifactId>powermock-module-testng</artifactId>
+        <version>${powermock.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.powermock</groupId>
+        <artifactId>powermock-api-mockito</artifactId>
+        <version>${powermock.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kitesdk</groupId>
+        <artifactId>kite-data-core</artifactId>
+        <version>${kitesdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kitesdk</groupId>
+        <artifactId>kite-data-hive</artifactId>
+        <version>${kitesdk.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>catalina</artifactId>
+        <version>${tomcat.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${zookeeper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_2.10</artifactId>
+        <version>${kafka.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-common</artifactId>
+        <version>${hadoop.2.version}</version>
+        <scope>provided</scope>
+				
+      </dependency>
+      <dependency>
+       <groupId>org.apache.avro</groupId>
+       <artifactId>avro</artifactId>
+       <version>${avro.version}</version>
+     </dependency>
+     <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-core_${scala.minor.version}</artifactId>
+       <version>${spark.version}</version>
+       <scope>provided</scope>
+			 
+     </dependency>
+     <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-yarn_${scala.minor.version}</artifactId>
+       <version>${spark.version}</version>
+       <scope>provided</scope>
+			 
+     </dependency>
+     <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-streaming_${scala.minor.version}</artifactId>
+       <version>${spark.version}</version>
+       <scope>provided</scope>
+			 
+     </dependency>
+     <dependency>
+       <groupId>org.apache.spark</groupId>
+       <artifactId>spark-streaming-kafka_${scala.minor.version}</artifactId>
+       <version>${spark.version}</version>
+       <scope>provided</scope>
+			 
+     </dependency>
+	 <dependency>
+	 	<groupId>com.esotericsoftware.kryo</groupId>
+	 	<artifactId>kryo</artifactId>
+        <version>${kryo.version}</version>
+	 </dependency>
+     <dependency>
+       <groupId>io.netty</groupId>
+       <artifactId>netty-all</artifactId>
+       <version>${netty.version}</version>
+     </dependency>	 
+   </dependencies>
+  </dependencyManagement>
+
+  <modules>
+    <module>common</module>
+    <module>common-test</module>
+    <module>core</module>
+    <module>repository</module>
+    <module>server</module>
+    <module>client</module>
+    <module>shell</module>
+    <module>docs</module>
+    <module>connector</module>
+    <module>execution</module>
+    <module>submission</module>
+    <module>security</module>
+    <module>dist</module>
+    <module>test</module>
+    <module>tools</module>
+    <module>tomcat</module>
+    <module>sqoop-spark-jar</module>
+    <module>spark-job</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>${maven.compile.source}</source>
+            <target>${maven.compile.target}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.8</version>
+          <configuration>
+            <excludes>
+              <exclude>.git/</exclude>
+              <exclude>.gitignore</exclude>
+              <exclude>.idea/</exclude>
+              <exclude>**/*.iml</exclude>
+              <exclude>*.log</exclude>
+              <exclude>**/nb-configuration.xml</exclude>
+              <exclude>**.patch</exclude>
+              <exclude>patch-process/*</exclude>
+              <exclude>.metadata/</exclude>
+              <exclude>**/target/*</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.14</version>
+          <configuration>
+            <forkCount>1</forkCount>
+            <reuseForks>false</reuseForks>
+            <forkedProcessTimeoutInSeconds>3600</forkedProcessTimeoutInSeconds>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <!-- See SQOOP-2120 for details about use of -XX:-UseSplitVerifier -->
+            <argLine>-Xms512m -Xmx2g -XX:MaxPermSize=1024m -XX:-UseSplitVerifier</argLine>
+            <properties>
+              <property>
+                <name>usedefaultlisteners</name>
+                <value>false</value> <!-- disabling default listeners is optional -->
+              </property>
+            </properties>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.18.1</version>
+        </plugin>
+		<plugin>
+		   <groupId>net.alchim31.maven</groupId>
+		   <artifactId>scala-maven-plugin</artifactId>
+		   <version>3.2.0</version>
+		     <executions>
+		       <execution>
+		         <id>scala-compile-first</id>
+		         <phase>process-resources</phase>
+		           <goals>
+		             <goal>add-source</goal>
+		             <goal>compile</goal>
+		           </goals>
+		       </execution>
+		    </executions>
+		  </plugin>
+      </plugins>
+    </pluginManagement>
+
+
+  </build>
+
+  <!-- All reports might be generated using mvn site command -->
+  <reporting>
+    <plugins>
+      <!-- Test code coverage might be executed with mvn cobertura:cobertura command -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+
+      <!-- Turning off standard reports as they collide with sphinx -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.4</version>
+        <reportSets>
+          <reportSet>
+            <reports/>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <developers>
+    <!-- alphabetical by id -->
+    <developer>
+      <id>abayer</id>
+      <name>Andrew Bayer</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>abhijeet</id>
+      <name>Abhijeet Gaikwad</name>
+      <organization>Persistent Systems Limited</organization>
+      <roles>
+        <role>committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>ahmed</id>
+      <name>Ahmed Radwan</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>committer</role>
+        <role>PMC member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>arvind</id>
+      <name>Arvind Prabhakar</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>blee</id>
+      <name>Bilung Lee</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>cheolsoo</id>
+      <name>Cheolsoo Park</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>gcottman</id>
+      <name>Greg Cottman</name>
+      <organization>Quest</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>guylemar</id>
+      <name>Guy le Mar</name>
+      <organization>Quest</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>hshreedharan</id>
+      <name>Hari Shreedharan</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>jarcec</id>
+      <name>Jaroslav Cecho</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>jmhsieh</id>
+      <name>Jonathan Hsieh</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>kathleen</id>
+      <name>Kathleen Ting</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>kimballa</id>
+      <name>Aaron Kimball</name>
+      <organization>WibiData</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>mengwei</id>
+      <name>Mengwei Ding</name>
+      <organization>Google</organization>
+      <roles>
+        <role>committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>olamy</id>
+      <name>Olivier Lamy</name>
+      <organization>Talend</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>posix4e</id>
+      <name>Alex Newman</name>
+      <organization>Opower</organization>
+      <roles>
+        <role>Committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>pzimdars</id>
+      <name>Paul Zimdars</name>
+      <organization>JPL</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>rvs</id>
+      <name>Roman Shaposhnik</name>
+      <organization>Cloudera</organization>
+      <roles>
+        <role>Committer</role>
+        <role>PMC Member</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>venkatnrangan</id>
+      <name>Venkat Ranganathan</name>
+      <organization>Hortonworks</organization>
+      <roles>
+        <role>Committer</role>
+      </roles>
+    </developer>
+  </developers>
+</project>

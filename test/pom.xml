@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache</groupId>
+    <artifactId>sqoop</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.apache.sqoop</groupId>
+  <artifactId>test</artifactId>
+  <name>Sqoop Integration Tests</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop</groupId>
+      <artifactId>sqoop-common-test</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop</groupId>
+      <artifactId>sqoop-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop</groupId>
+      <artifactId>sqoop-client</artifactId>
+    </dependency>
+    
+     <dependency>		
+      <groupId>org.apache.sqoop.execution</groupId>		
+      <artifactId>sqoop-execution-mapreduce</artifactId>		
+    </dependency>		
+		
+    <dependency>		
+      <groupId>org.apache.sqoop.submission</groupId>		
+      <artifactId>sqoop-submission-mapreduce</artifactId>		
+    </dependency>
+
+     <dependency>
+      <groupId>org.apache.sqoop.execution</groupId>
+      <artifactId>sqoop-execution-spark</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.submission</groupId>
+      <artifactId>sqoop-submission-spark</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.repository</groupId>
+      <artifactId>sqoop-repository-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.repository</groupId>
+      <artifactId>sqoop-repository-derby</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.connector</groupId>
+      <artifactId>sqoop-connector-generic-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.connector</groupId>
+      <artifactId>sqoop-connector-hdfs</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.connector</groupId>
+      <artifactId>sqoop-connector-kite</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sqoop.connector</groupId>
+      <artifactId>sqoop-connector-kafka</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-mapreduce-client-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-minicluster</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-auth</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hive</groupId>
+      <artifactId>hive-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hive</groupId>
+      <artifactId>hive-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.cargo</groupId>
+      <artifactId>cargo-core-container-tomcat</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbynet</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+    </dependency>
+
+     <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+        <scope>provided</scope>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+  <!-- Add classifier name to the JAR name -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+
+      <!--
+        Exclude all integration tests on normal execution
+        Run "mvn integration-test" to execute integration tests
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/integration/**</exclude>
+          </excludes>
+          <systemPropertyVariables>
+            <sqoop.integration.tmpdir>${project.build.directory}</sqoop.integration.tmpdir>
+          </systemPropertyVariables>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <phase>integration-test</phase>
+            <configuration>
+              <excludes>
+                <exclude>none</exclude>
+              </excludes>
+              <includes>
+                <include>**/integration/**</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <!-- Profiles for various supported Hadoop distributions -->
+  <profiles>
+    <!-- Special JDBC Drivers -->
+
+    <!--
+      Oracle JDBC Driver
+      Install: mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14  -Dversion=11.2.0.3 -Dpackaging=jar -Dfile=/path/to/the/jar/ojdbc6.jar
+      Usage: mvn integration-test -Djdbc.oracle
+    -->
+    <profile>
+      <id>jdbc-oracle</id>
+
+      <activation>
+        <property>
+          <name>jdbc.oracle</name>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <!--
+      Microsoft SQL Server JDBC Driver
+      Install: mvn install:install-file -DgroupId=com.microsoft -DartifactId=sqljdbc4  -Dversion=4.0 -Dpackaging=jar -Dfile=/path/to/the/jar/sqljdbc4.jar
+      Usage: mvn integration-test -Djdbc.sqlserver
+    -->
+    <profile>
+      <id>jdbc-sqlserver</id>
+
+      <activation>
+        <property>
+          <name>jdbc.sqlserver</name>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.microsoft</groupId>
+          <artifactId>sqljdbc4</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <!--
+      Teradata JDBC Driver
+      Install: mvn install:install-file -DgroupId=com.teradata -DartifactId=tdgssconfig  -Dversion=14.00.00.21 -Dpackaging=jar -Dfile=/path/to/the/jar/tdgssconfig.jar
+               mvn install:install-file -DgroupId=com.teradata -DartifactId=terajdbc4  -Dversion=14.00.00.21 -Dpackaging=jar -Dfile=/path/to/the/jar/terajdbc4.jar
+      Usage: mvn integration-test -Djdbc.teradata
+    -->
+    <profile>
+      <id>jdbc-teradata</id>
+
+      <activation>
+        <property>
+          <name>jdbc.teradata</name>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.teradata</groupId>
+          <artifactId>tdgssconfig</artifactId>
+        </dependency>
+
+        <dependency>
+          <groupId>com.teradata</groupId>
+          <artifactId>terajdbc4</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <!--
+      Netezza JDBC Driver
+      Install: mvn install:install-file -DgroupId=com.ibm.netezza -DartifactId=nzjdbc3 -Dversion=6.0 -Dpackaging=jar -Dfile=/path/to/the/jar/nzjdbc3.jar
+      Usage: mvn integration-test -Djdbc.netezza
+    -->
+    <profile>
+      <id>jdbc-netezza</id>
+
+      <activation>
+        <property>
+          <name>jdbc.netezza</name>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.ibm.netezza</groupId>
+          <artifactId>nzjdbc3</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+
+  </profiles>
+
+</project>
