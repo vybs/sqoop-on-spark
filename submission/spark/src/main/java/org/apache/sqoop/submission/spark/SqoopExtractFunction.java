@@ -13,6 +13,7 @@ import org.apache.sqoop.connector.matcher.MatcherFactory;
 import org.apache.sqoop.core.JobConstants;
 import org.apache.sqoop.driver.JobRequest;
 import org.apache.sqoop.error.code.MRExecutionError;
+import org.apache.sqoop.error.code.SparkExecutionError;
 import org.apache.sqoop.job.SparkPrefixContext;
 import org.apache.sqoop.job.etl.Extractor;
 import org.apache.sqoop.job.etl.ExtractorContext;
@@ -21,7 +22,8 @@ import org.apache.sqoop.schema.Schema;
 import org.apache.sqoop.utils.ClassUtils;
 
 @SuppressWarnings("serial")
-public class SqoopExtractFunction implements Function<Partition, List<IntermediateDataFormat<?>>>, Serializable {
+public class SqoopExtractFunction implements Function<Partition, List<IntermediateDataFormat<?>>>,
+    Serializable {
 
   private final JobRequest request;
 
@@ -40,9 +42,9 @@ public class SqoopExtractFunction implements Function<Partition, List<Intermedia
     Extractor extractor = (Extractor) ClassUtils.instantiate(extractorName);
 
     Schema fromSchema = request.getJobSubmission().getFromSchema();
-    
+
     Schema toSchema = request.getJobSubmission().getToSchema();
-    
+
     Matcher matcher = MatcherFactory.getMatcher(fromSchema, toSchema);
 
     String fromIDFClass = request.getDriverContext().getString(
@@ -50,8 +52,7 @@ public class SqoopExtractFunction implements Function<Partition, List<Intermedia
     IntermediateDataFormat<Object> fromIDF = (IntermediateDataFormat<Object>) ClassUtils
         .instantiate(fromIDFClass);
     fromIDF.setSchema(matcher.getFromSchema());
-    
-    
+
     String toIDFClass = request.getDriverContext().getString(
         JobConstants.TO_INTERMEDIATE_DATA_FORMAT);
     IntermediateDataFormat<Object> toIDF = (IntermediateDataFormat<Object>) ClassUtils
@@ -73,13 +74,13 @@ public class SqoopExtractFunction implements Function<Partition, List<Intermedia
       extractor.extract(extractorContext, fromLinkConfig, fromJobConfig, p);
 
     } catch (Exception e) {
-      throw new SqoopException(MRExecutionError.MAPRED_EXEC_0017, e);
+      throw new SqoopException(SparkExecutionError.SPARK_EXEC_0000, e);
     } finally {
-      LOG.info("Stopping progress service");
+      LOG.info("Stopping extractor service");
     }
 
     System.out.println("Extractor has finished");
-    System.out.println(">>> MAP time ms:"+(System.currentTimeMillis()-mapTime));
+    System.out.println(">>> MAP time ms:" + (System.currentTimeMillis() - mapTime));
 
     return request.getData();
   }

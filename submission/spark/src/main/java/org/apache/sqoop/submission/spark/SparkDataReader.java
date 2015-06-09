@@ -10,7 +10,7 @@ public class SparkDataReader extends DataReader {
 
   private Iterator<IntermediateDataFormat<?>> dataIterator = null;
 
-  public SparkDataReader( List<IntermediateDataFormat<?>> data) {
+  public SparkDataReader(List<IntermediateDataFormat<?>> data) {
     this.dataIterator = (data).iterator();
   }
 

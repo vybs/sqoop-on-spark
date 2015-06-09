@@ -15,7 +15,7 @@ import org.apache.sqoop.model.MLinkConfig;
 import org.apache.sqoop.model.MToConfig;
 import org.apache.sqoop.repository.RepositoryManager;
 
-public class SqoopJDBCKafkaJob extends SqoopSparkJob {
+public class SqoopJDBCKafkaJob {
 
   public static void main(String[] args) throws Exception {
 
@@ -112,7 +112,7 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
     options.addOption(OptionBuilder.withLongOpt("broker").withDescription("kafka borker list")
         .hasArg().isRequired().withArgName("kafkaBrokerList").create());
 
-    addCommonOptions(options);
+    SqoopSparkJob.addCommonOptions(options);
 
     return options;
   }

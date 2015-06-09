@@ -17,7 +17,7 @@ import org.apache.sqoop.model.MLinkConfig;
 import org.apache.sqoop.model.MToConfig;
 import org.apache.sqoop.repository.RepositoryManager;
 
-public class SqoopJDBCHDFSJob extends SqoopSparkJob {
+public class SqoopJDBCHDFSJob {
 
   @SuppressWarnings("static-access")
   static Options createOptions() {
@@ -43,7 +43,7 @@ public class SqoopJDBCHDFSJob extends SqoopSparkJob {
     options.addOption(OptionBuilder.withLongOpt("outputDir").withDescription("hdfs output dir")
         .hasArg().isRequired().withArgName("outputDir").create());
 
-    addCommonOptions(options);
+    SqoopSparkJob.addCommonOptions(options);
 
     return options;
   }
