@@ -344,7 +344,7 @@ public class JobRequest implements Serializable {
     }
   }
 
-  private Collection<IntermediateDataFormat<?>> rowData = new ArrayList<IntermediateDataFormat<?>>();
+  private List<IntermediateDataFormat<?>> rowData = new ArrayList<IntermediateDataFormat<?>>();
 
   private Map<String, String>  map;
 
@@ -352,7 +352,7 @@ public class JobRequest implements Serializable {
     rowData.add(idf);
   }
 
-  public Collection<IntermediateDataFormat<?>> getData() {
+  public List<IntermediateDataFormat<?>> getData() {
     return rowData;
   }
 

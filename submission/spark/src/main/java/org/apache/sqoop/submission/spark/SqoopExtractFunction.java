@@ -1,7 +1,7 @@
 package org.apache.sqoop.submission.spark;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.function.Function;
@@ -21,7 +21,7 @@ import org.apache.sqoop.schema.Schema;
 import org.apache.sqoop.utils.ClassUtils;
 
 @SuppressWarnings("serial")
-public class SqoopExtractFunction implements Function<Partition, Collection<IntermediateDataFormat<?>>>, Serializable {
+public class SqoopExtractFunction implements Function<Partition, List<IntermediateDataFormat<?>>>, Serializable {
 
   private final JobRequest request;
 
@@ -32,7 +32,7 @@ public class SqoopExtractFunction implements Function<Partition, Collection<Inte
   }
 
   @Override
-  public Collection<IntermediateDataFormat<?>> call(Partition p) throws Exception {
+  public List<IntermediateDataFormat<?>> call(Partition p) throws Exception {
 
     long mapTime = System.currentTimeMillis();
     String extractorName = request.getDriverContext().getString(JobConstants.JOB_ETL_EXTRACTOR);
@@ -81,9 +81,7 @@ public class SqoopExtractFunction implements Function<Partition, Collection<Inte
     System.out.println("Extractor has finished");
     System.out.println(">>> MAP time ms:"+(System.currentTimeMillis()-mapTime));
 
-    return (request.getData());
-    
-    
+    return request.getData();
   }
 
 }

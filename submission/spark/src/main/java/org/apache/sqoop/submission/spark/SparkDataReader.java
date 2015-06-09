@@ -1,7 +1,7 @@
 package org.apache.sqoop.submission.spark;
 
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.sqoop.connector.idf.IntermediateDataFormat;
 import org.apache.sqoop.etl.io.DataReader;
@@ -10,8 +10,8 @@ public class SparkDataReader extends DataReader {
 
   private Iterator<IntermediateDataFormat<?>> dataIterator = null;
 
-  public SparkDataReader( Collection<IntermediateDataFormat<?>> data) {
-    this.dataIterator = data.iterator();
+  public SparkDataReader( List<IntermediateDataFormat<?>> data) {
+    this.dataIterator = (data).iterator();
   }
 
   @Override

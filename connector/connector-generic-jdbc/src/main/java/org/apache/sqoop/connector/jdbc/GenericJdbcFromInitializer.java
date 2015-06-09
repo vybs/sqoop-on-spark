@@ -343,8 +343,6 @@ public class GenericJdbcFromInitializer extends Initializer<LinkConfiguration, F
 
     context.setString(GenericJdbcConnectorConstants.CONNECTOR_JDBC_FROM_DATA_SQL, dataSql);
     
-    System.out.println( "DDDDDD" + context.getString(GenericJdbcConnectorConstants.CONNECTOR_JDBC_FROM_DATA_SQL));
-
     context.setString(Constants.JOB_ETL_FIELD_NAMES, fieldNames);
   }
 }

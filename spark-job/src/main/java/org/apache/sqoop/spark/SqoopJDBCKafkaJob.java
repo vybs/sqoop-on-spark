@@ -73,10 +73,15 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
     toConfig.getStringInput("toJobConfig.topic").setValue("test-spark-topic");
 
     MDriverConfig driverConfig = sqoopJob.getDriverConfig();
-    driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(Integer.valueOf(cArgs.getOptionValue("maxE")));
-    driverConfig.getIntegerInput("throttlingConfig.numLoaders").setValue(Integer.valueOf(cArgs.getOptionValue("numL")));
-    driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(3);
-    RepositoryManager.getInstance().getRepository().createJob(sqoopJob);
+    if (cArgs.getOptionValue("numE") != null) {
+      driverConfig.getIntegerInput("throttlingConfig.numExtractors").setValue(
+          Integer.valueOf(cArgs.getOptionValue("numE")));
+    }
+    if (cArgs.getOptionValue("numL") != null) {
+
+      driverConfig.getIntegerInput("throttlingConfig.numLoaders").setValue(
+          Integer.valueOf(cArgs.getOptionValue("numL")));
+    }    RepositoryManager.getInstance().getRepository().createJob(sqoopJob);
     sparkJob.setJob(sqoopJob);
     sparkJob.execute(conf, context);
   }
@@ -86,20 +91,20 @@ public class SqoopJDBCKafkaJob extends SqoopSparkJob {
 
     Options options = new Options();
 
-    options.addOption(OptionBuilder.withLongOpt("jcs").withDescription("jdbc connection string")
+    options.addOption(OptionBuilder.withLongOpt("jdbcString").withDescription("jdbc connection string")
         .hasArg().isRequired().withArgName("jdbcConnectionString").create());
 
     options.addOption(OptionBuilder.withLongOpt("u").withDescription("jdbc username").hasArg()
         .isRequired().withArgName("username").create());
 
     options.addOption(OptionBuilder.withLongOpt("p").withDescription("jdbc password").hasArg()
-        .isRequired().withArgName("password").create());
+        .withArgName("password").create());
 
     options.addOption(OptionBuilder.withLongOpt("table").withDescription("jdbc table").hasArg()
         .isRequired().withArgName("table").create());
 
-    options.addOption(OptionBuilder.withLongOpt("pc").withDescription("jdbc table parition column")
-        .hasArg().isRequired().withArgName("pc").create());
+    options.addOption(OptionBuilder.withLongOpt("partitionCol").withDescription("jdbc table parition column")
+        .hasArg().withArgName("partitionCol").create());
 
     options.addOption(OptionBuilder.withLongOpt("zk").withDescription("kafka zk").hasArg()
         .isRequired().withArgName("kafkaZkHostAndPort").create());

@@ -1,10 +1,12 @@
 package org.apache.sqoop.submission.spark;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.sqoop.common.Direction;
 import org.apache.sqoop.common.SqoopException;
 import org.apache.sqoop.connector.idf.IntermediateDataFormat;
@@ -21,8 +23,8 @@ import org.apache.sqoop.schema.Schema;
 import org.apache.sqoop.utils.ClassUtils;
 
 @SuppressWarnings("serial")
-public class SqoopLoadFunction implements Function<Collection<IntermediateDataFormat<?>>, Void>,
-    Serializable {
+public class SqoopLoadFunction implements
+    FlatMapFunction<Iterator<List<IntermediateDataFormat<?>>>, Void>, Serializable {
 
   private final JobRequest request;
 
@@ -33,7 +35,7 @@ public class SqoopLoadFunction implements Function<Collection<IntermediateDataFo
   }
 
   @Override
-  public Void call(Collection<IntermediateDataFormat<?>> data) throws Exception {
+  public Iterable<Void> call(Iterator<List<IntermediateDataFormat<?>>> data) throws Exception {
 
     long reduceTime = System.currentTimeMillis();
 
@@ -44,29 +46,31 @@ public class SqoopLoadFunction implements Function<Collection<IntermediateDataFo
 
     LOG.info("Sqoop Load Function is  starting");
     try {
-      DataReader reader = new SparkDataReader(data);
+      if (data.hasNext()) {
+        DataReader reader = new SparkDataReader(data.next());
 
-      Loader loader = (Loader) ClassUtils.instantiate(loaderName);
+        Loader loader = (Loader) ClassUtils.instantiate(loaderName);
 
-      SparkPrefixContext subContext = new SparkPrefixContext(request.getConf(),
-          JobConstants.PREFIX_CONNECTOR_TO_CONTEXT);
+        SparkPrefixContext subContext = new SparkPrefixContext(request.getConf(),
+            JobConstants.PREFIX_CONNECTOR_TO_CONTEXT);
 
-      Object toLinkConfig = request.getConnectorLinkConfig(Direction.TO);
-      Object toJobConfig = request.getJobConfig(Direction.TO);
+        Object toLinkConfig = request.getConnectorLinkConfig(Direction.TO);
+        Object toJobConfig = request.getJobConfig(Direction.TO);
 
-      // Create loader context
-      LoaderContext loaderContext = new LoaderContext(subContext, reader, matcher.getToSchema());
+        // Create loader context
+        LoaderContext loaderContext = new LoaderContext(subContext, reader, matcher.getToSchema());
 
-      LOG.info("Running loader class " + loaderName);
-      loader.load(loaderContext, toLinkConfig, toJobConfig);
-      System.out.println("Loader has finished");
-      System.out.println(">>> REDUCE time ms:" + (System.currentTimeMillis() - reduceTime));
+        LOG.info("Running loader class " + loaderName);
+        loader.load(loaderContext, toLinkConfig, toJobConfig);
+        System.out.println("Loader has finished");
+        System.out.println(">>> REDUCE time ms:" + (System.currentTimeMillis() - reduceTime));
+      }
     } catch (Throwable t) {
       LOG.error("Error while loading data out of MR job.", t);
       throw new SqoopException(SparkExecutionError.SPARK_EXEC_0000, t);
     }
 
-    return null;
+    return Collections.singletonList(null);
 
   }
 
