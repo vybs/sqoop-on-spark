@@ -39,3 +39,19 @@ Maven commands. For example:
 
 Please refer to the Sqoop documentation for a full list of supported Hadoop
 distributions and values of the hadoop.profile property.
+
+== Sqoop on spark ==
+
+
+Refer to the talk @hadoop summit for more details.
+
+Once the sqoop is built, try running a sqoop job as spark job using the following command
+
+
+=Local Job Execution=
+
+./bin/spark-submit --class org.apache.sqoop.spark.SqoopJDBCHDFSJob --master local  /Users/vybs/wspace/sqoop-spark/sqoop-on-spark/sqoop-spark-jar/target/sqoop-spark-jar-2.0.0-SNAPSHOT.jar --confDir /Users/vybs/wspace/sqoop-spark/sqoop-on-spark/dist/src/main/server/conf/ --jdbcString jdbc:mysql://localhost:3306/test --u root --table test --partitionCol id --outputDir hdfs://localhost:9999/tmp/out --numE 2 --numL 6
+
+=Yarn execution=
+./bin/spark-submit --class org.apache.sqoop.spark.SqoopJDBCHDFSJob --master yarn  /Users/vybs/wspace/sqoop-spark/sqoop-on-spark/sqoop-spark-jar/target/sqoop-spark-jar-2.0.0-SNAPSHOT.jar --confDir /Users/vybs/wspace/sqoop-spark/sqoop-on-spark/dist/src/main/server/conf/ --jdbcString jdbc:mysql://localhost:3306/test --u root --table test --partitionCol id --outputDir hdfs://localhost:9999/tmp/out --numE 2 --numL 6
+
