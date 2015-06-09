@@ -46,7 +46,7 @@ public class SqoopLoadFunction implements
 
     LOG.info("Sqoop Load Function is  starting");
     try {
-      if (data.hasNext()) {
+      while (data.hasNext()) {
         DataReader reader = new SparkDataReader(data.next());
 
         Loader loader = (Loader) ClassUtils.instantiate(loaderName);
